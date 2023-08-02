@@ -19,7 +19,10 @@ public class SelectCursor : MonoBehaviour
     {
         Vector2 move = _input.PlayerBattleTurn.Move.ReadValue<Vector2>().normalized;
 
-        Debug.Log(move);
+        if(!(move ==  new Vector2(0, 0)))
+        {
+            Debug.Log("Moving");
+        }
     }
 
     void OnEnable()

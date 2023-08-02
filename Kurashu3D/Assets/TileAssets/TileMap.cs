@@ -10,9 +10,12 @@ public class TileMap : MonoBehaviour
 
     int [,] tiles;
 
+    public List<GameObject> gameTiles;
+
     int mapSizeX = 10;
     int mapSizeY = 10;
     Node[,] graph;
+
 
     //right now we are assuming we only have one unit
     List<Node> currentPath = null;
@@ -27,7 +30,8 @@ public class TileMap : MonoBehaviour
 
         GenerateMapData();
         GeneratePathfindingGraph();
-        GenerateMapVisual();
+        //GenerateMapVisual();
+        FindTile(0, 1);
 
     }
 
@@ -70,6 +74,17 @@ public class TileMap : MonoBehaviour
         TileType tt = tileTypes[tiles[x, y]];
 
         return tt.movementCost;
+    }
+
+    public void FindTile(int x, int y)
+    {
+        foreach(GameObject tile in gameTiles)
+        {
+            if(tile.GetComponent<ClickableTile>().tileX == x && tile.GetComponent<ClickableTile>().tileY == y)
+            {
+                Debug.Log("found tile at " + x + ", " + y);
+            }
+        }
     }
 
     
