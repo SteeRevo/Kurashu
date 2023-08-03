@@ -10,7 +10,7 @@ public class TileMap : MonoBehaviour
 
     int [,] tiles;
 
-    public List<GameObject> gameTiles;
+    private GameObject[] gameTiles;
 
     int mapSizeX = 10;
     int mapSizeY = 10;
@@ -20,18 +20,24 @@ public class TileMap : MonoBehaviour
     //right now we are assuming we only have one unit
     List<Node> currentPath = null;
 
+    void Awake()
+    {
+        gameTiles = GameObject.FindGameObjectsWithTag("Tile");
+    }
+
     void Start()
     {
         //setup selected unit variables
         selectedUnit.GetComponent<Unit>().tileX = (int)selectedUnit.transform.position.x;
         selectedUnit.GetComponent<Unit>().tileY = (int)selectedUnit.transform.position.z;
         selectedUnit.GetComponent<Unit>().map = this;
+        
 
 
         GenerateMapData();
         GeneratePathfindingGraph();
         //GenerateMapVisual();
-        FindTile(0, 1);
+        FindTile(2, 4);
 
     }
 
@@ -83,6 +89,9 @@ public class TileMap : MonoBehaviour
             if(tile.GetComponent<ClickableTile>().tileX == x && tile.GetComponent<ClickableTile>().tileY == y)
             {
                 Debug.Log("found tile at " + x + ", " + y);
+                Debug.Log(tile.GetComponent<ClickableTile>().GetPosition());
+                selectedUnit.GetComponent<Unit>().TeleportTo(tile.GetComponent<ClickableTile>().GetPosition());
+                
             }
         }
     }

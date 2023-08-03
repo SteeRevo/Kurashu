@@ -10,5 +10,17 @@ public class ClickableTile : MonoBehaviour
 
    
     //map.GeneratePathTo(tileX, tileY);
+
+    void OnMouseUp()
+    {
+        map.GeneratePathTo(tileX, tileY);
+    }
+
+
+
+    public Vector3 GetPosition()
+    {
+        return new Vector3(transform.position.x, transform.position.y, transform.position.z);
+    }
     
 }

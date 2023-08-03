@@ -28,6 +28,11 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public void TeleportTo(Vector3 vec)
+    {
+        transform.position = new Vector3(vec.x, transform.position.y, vec.z);
+    }
+
     public void MoveNextTile()
     {
         float remainingMovement = moveSpeed;
