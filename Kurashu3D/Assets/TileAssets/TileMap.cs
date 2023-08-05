@@ -16,6 +16,8 @@ public class TileMap : MonoBehaviour
     int mapSizeY = 10;
     Node[,] graph;
 
+    Vector2 currCursorPos = new Vector2(1, 0);
+
 
     //right now we are assuming we only have one unit
     List<Node> currentPath = null;
@@ -73,6 +75,13 @@ public class TileMap : MonoBehaviour
         tiles[4,6] = 2;
         tiles[8,5] = 2;
         tiles[8,6] = 2;
+    }
+
+    public Vector3 UpdateCursorPos(Vector2 vec)
+    {
+        currCursorPos += vec;
+        Debug.Log(currCursorPos);
+        return new Vector3(0, 0, 0);
     }
 
     public float CostToEnterTile(int x, int y)
