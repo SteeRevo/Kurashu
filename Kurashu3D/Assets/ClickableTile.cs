@@ -16,6 +16,19 @@ public class ClickableTile : MonoBehaviour
         map.GeneratePathTo(tileX, tileY);
     }
 
+    public void setSelectable()
+    {
+        GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.white);
+        map.GeneratePathTo(tileX, tileY);
+    }
+
+    public void Unselectable()
+    {
+        GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+        
+    }
+
 
 
     public Vector3 GetPosition()

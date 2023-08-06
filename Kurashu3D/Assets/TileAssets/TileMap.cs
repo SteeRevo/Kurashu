@@ -12,6 +12,8 @@ public class TileMap : MonoBehaviour
 
     private GameObject[] gameTiles;
 
+    int [,] moveableTiles;  
+
     int mapSizeX = 10;
     int mapSizeY = 10;
     Node[,] graph;
@@ -30,16 +32,17 @@ public class TileMap : MonoBehaviour
     void Start()
     {
         //setup selected unit variables
-        selectedUnit.GetComponent<Unit>().tileX = (int)selectedUnit.transform.position.x;
-        selectedUnit.GetComponent<Unit>().tileY = (int)selectedUnit.transform.position.z;
+        selectedUnit.GetComponent<Unit>().tileX = 0;
+        selectedUnit.GetComponent<Unit>().tileY = 0;
         selectedUnit.GetComponent<Unit>().map = this;
         
+
 
 
         GenerateMapData();
         GeneratePathfindingGraph();
         //GenerateMapVisual();
-        FindTile(2, 4);
+        //FindTile(2, 4);
 
     }
 
@@ -91,15 +94,21 @@ public class TileMap : MonoBehaviour
         return tt.movementCost;
     }
 
-    public void FindTile(int x, int y)
+    public void FindTile()
     {
         foreach(GameObject tile in gameTiles)
         {
-            if(tile.GetComponent<ClickableTile>().tileX == x && tile.GetComponent<ClickableTile>().tileY == y)
+            tile.GetComponent<ClickableTile>().Unselectable();
+        }
+        foreach(GameObject tile in gameTiles)
+        {
+            if(tile.GetComponent<ClickableTile>().tileX == currCursorPos.x && tile.GetComponent<ClickableTile>().tileY == currCursorPos.y)
             {
-                Debug.Log("found tile at " + x + ", " + y);
+                
+                tile.GetComponent<ClickableTile>().setSelectable();
+                Debug.Log("found tile at " + currCursorPos.x + ", " + currCursorPos.y);
                 Debug.Log(tile.GetComponent<ClickableTile>().GetPosition());
-                selectedUnit.GetComponent<Unit>().TeleportTo(tile.GetComponent<ClickableTile>().GetPosition());
+                //selectedUnit.GetComponent<Unit>().TeleportTo(tile.GetComponent<ClickableTile>().GetPosition());
                 
             }
         }
@@ -169,7 +178,14 @@ public class TileMap : MonoBehaviour
 
     public Vector3 TileCoordToWorldCoord(int x, int y)
     {
-        return new Vector3(x, 0, y);
+        foreach(GameObject tile in gameTiles)
+        {
+            if(tile.GetComponent<ClickableTile>().tileX == x && tile.GetComponent<ClickableTile>().tileY == y)
+            {
+                return tile.transform.position;
+            }
+        }
+        return new Vector3(0, 0, 0);
     }
 
     public void GeneratePathTo(int x, int y)

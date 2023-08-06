@@ -15,6 +15,7 @@ public class SelectCursor : MonoBehaviour
         _input = new PlayerControls();
         
         
+        
     }
 
     // Update is called once per frame
@@ -34,17 +35,27 @@ public class SelectCursor : MonoBehaviour
         else{
             isMoving = false;
         }
+
+        if(_input.PlayerBattleTurn.Select.triggered)
+        {
+            SelectTile();
+        }
        
 
     }
 
-    
+
+    private void SelectTile()
+    {
+        tilemap.FindTile();
+    }
 
 
 
     void OnEnable()
     {
         _input.PlayerBattleTurn.Enable();
+        _input.PlayerBattleTurn.Select.Enable();
         
     }
 
