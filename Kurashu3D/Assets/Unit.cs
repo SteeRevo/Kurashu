@@ -8,7 +8,7 @@ public class Unit : MonoBehaviour
     public int tileY;
     public TileMap map;
 
-    int moveSpeed = 2;
+    private int moveSpeed = 2;
 
     public List<Node> currentPath = null;
 
@@ -26,6 +26,11 @@ public class Unit : MonoBehaviour
                 currNode++;
             }
         }
+    }
+
+    public int get_moveSpeed()
+    {
+        return moveSpeed;
     }
 
     public void TeleportTo(Vector3 vec)

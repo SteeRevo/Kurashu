@@ -20,7 +20,7 @@ public class ClickableTile : MonoBehaviour
     {
         GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
         GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.white);
-        map.GeneratePathTo(tileX, tileY);
+        //map.GeneratePathTo(tileX, tileY);
     }
 
     public void Unselectable()

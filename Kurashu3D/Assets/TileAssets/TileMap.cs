@@ -12,10 +12,10 @@ public class TileMap : MonoBehaviour
 
     private GameObject[] gameTiles;
 
-    int [,] moveableTiles;  
+    public List<GameObject> moveableTiles; 
 
-    int mapSizeX = 10;
-    int mapSizeY = 10;
+    int mapSizeX = 8;
+    int mapSizeY = 6;
     Node[,] graph;
 
     Vector2 currCursorPos = new Vector2(1, 0);
@@ -41,6 +41,7 @@ public class TileMap : MonoBehaviour
 
         GenerateMapData();
         GeneratePathfindingGraph();
+        GeneratePathTo(selectedUnit.GetComponent<Unit>().tileX, selectedUnit.GetComponent<Unit>().tileY);
         //GenerateMapVisual();
         //FindTile(2, 4);
 
@@ -60,24 +61,7 @@ public class TileMap : MonoBehaviour
             }
         }
 
-        for(int x = 3; x < 6; x++)
-        {
-            for(int y = 0; y < 4; y++)
-            {
-                tiles[x,y] = 1;
-            }
-        }
-
-        tiles[4,4] = 2;
-        tiles[5,4] = 2;
-        tiles[6,4] = 2;
-        tiles[7,4] = 2;
-        tiles[8,4] = 2;
-
-        tiles[4,5] = 2;
-        tiles[4,6] = 2;
-        tiles[8,5] = 2;
-        tiles[8,6] = 2;
+        
     }
 
     public Vector3 UpdateCursorPos(Vector2 vec)
@@ -112,6 +96,25 @@ public class TileMap : MonoBehaviour
                 
             }
         }
+    }
+
+    private GameObject FindTileXY(int x, int y)
+    {
+        foreach(GameObject tile in gameTiles)
+        {
+            if(tile.GetComponent<ClickableTile>().tileX == x && tile.GetComponent<ClickableTile>().tileY == y)
+            {
+                
+                //Debug.Log("found tile at " + currCursorPos.x + ", " + currCursorPos.y);
+                //Debug.Log(tile.GetComponent<ClickableTile>().GetPosition());
+                return tile;
+                
+            }
+            
+        }
+
+        Debug.Log("error with tile " + x + " " + y);
+        return null;
     }
 
     
@@ -190,6 +193,7 @@ public class TileMap : MonoBehaviour
 
     public void GeneratePathTo(int x, int y)
     {
+        
 
         
         //clear old path
@@ -197,11 +201,12 @@ public class TileMap : MonoBehaviour
 
         Dictionary<Node, float> dist = new Dictionary<Node, float>();
         Dictionary<Node, Node> prev = new Dictionary<Node, Node>();
+        int [,] cost = new int[mapSizeX, mapSizeY];
 
         List<Node> unvisited = new List<Node>();
 
         Node source = graph[selectedUnit.GetComponent<Unit>().tileX, selectedUnit.GetComponent<Unit>().tileY];
-        Node target = graph[x, y];
+        //Node target = graph[x, y];
 
         dist[source] = 0;
         prev[source] = null;
@@ -231,10 +236,12 @@ public class TileMap : MonoBehaviour
 
             }
 
+            /*
+
             if(u == target)
             {
                 break;
-            }
+            }*/
 
             unvisited.Remove(u);
 
@@ -246,16 +253,23 @@ public class TileMap : MonoBehaviour
                     dist[v] = alt;
                     prev[v] = u;
                 }
+
+                cost[v.x, v.y] = cost[u.x, u.y] + (int)CostToEnterTile(v.x, v.y);
+                if(selectedUnit.GetComponent<Unit>().get_moveSpeed() - cost[v.x, v.y] >= 0)
+                {
+                    moveableTiles.Add(FindTileXY(v.x, v.y));
+                }
             }
         }
+
         //if here we found the shorted route to target or there is no route at all
-        if(prev[target] == null)
+        /*if(prev[target] == null)
         {
             //no route between target and source
 
             return;
         }
-
+        
         currentPath = new List<Node>();
 
         Node curr = target;
@@ -268,6 +282,24 @@ public class TileMap : MonoBehaviour
 
         currentPath.Reverse();
         selectedUnit.GetComponent<Unit>().currentPath = currentPath;
+        */
+
+        SetSelectableTiles();
+
+        //Debug.Log(moveableTiles);
+
+    }
+
+    private void SetSelectableTiles()
+    {
+        foreach(GameObject tile in moveableTiles)
+        {
+            tile.GetComponent<ClickableTile>().setSelectable();
+            Debug.Log("Set selectable " + tile.GetComponent<ClickableTile>().tileX + " " + tile.GetComponent<ClickableTile>().tileY);
+        }
+
+        //moveableTiles[0].GetComponent<ClickableTile>().setSelectable();
+       
     }
 
 
