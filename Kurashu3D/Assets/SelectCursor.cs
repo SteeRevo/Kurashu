@@ -27,9 +27,12 @@ public class SelectCursor : MonoBehaviour
         {
             if(!isMoving)
             {
-                tilemap.GetComponent<TileMap>().UpdateCursorPos(move);
-                transform.position += new Vector3(move.x, 0, move.y);   
-                isMoving = true; 
+                if(tilemap.GetComponent<TileMap>().UpdateCursorPos(move))
+                {
+                    transform.position += new Vector3(move.x, 0, move.y);   
+                    isMoving = true; 
+                }
+                
             }
         }
         else{

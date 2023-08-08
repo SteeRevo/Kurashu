@@ -64,11 +64,19 @@ public class TileMap : MonoBehaviour
         
     }
 
-    public Vector3 UpdateCursorPos(Vector2 vec)
+    public bool UpdateCursorPos(Vector2 vec)
     {
-        currCursorPos += vec;
-        Debug.Log(currCursorPos);
-        return new Vector3(0, 0, 0);
+        if(currCursorPos.x + vec.x < mapSizeX && currCursorPos.y + vec.y < mapSizeY && currCursorPos.x + vec.x >= 0 && currCursorPos.y + vec.y >= 0)
+        {
+            currCursorPos += vec;
+            Debug.Log(currCursorPos);
+            return true;
+            
+        }
+
+        return false;
+
+        
     }
 
     public float CostToEnterTile(int x, int y)
